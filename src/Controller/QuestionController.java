@@ -5,7 +5,7 @@
 package Controller;
 
 import Model.Question;
-import View.Grade10;
+import View.Exam;
 import DAO.QuestionDAO;
 import java.util.ArrayList;
 /**
@@ -20,7 +20,7 @@ public class QuestionController {
         this.questionDAO = quesDAO;
     }
     
-    public ArrayList<Question> getAllQuestions(){
-        return questionDAO.getAll();
+    public ArrayList<Question> getAllQuestions(String grade){
+        return questionDAO.getAll(grade);
     }
 }

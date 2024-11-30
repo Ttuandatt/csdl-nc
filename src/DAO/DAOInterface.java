@@ -10,9 +10,7 @@ import java.util.ArrayList;
  *
  * @author ACER
  */
-public interface DAOInterface<D> {
-    
-    public ArrayList<D> getAll();
+public interface DAOInterface<D> {    
     public D getByID(String d);
     public boolean has(String d);
     public boolean add(D d);

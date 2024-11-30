@@ -17,13 +17,13 @@ public class QuestionDAO implements DAOInterface<Question>{
 
     JDBCConnection jdbc = new JDBCConnection();
     
-    @Override
-    public ArrayList<Question> getAll() {
+    public ArrayList<Question> getAll(String grade) {
         ArrayList<Question> quesArr = new ArrayList<>();
         if(jdbc.openConnection()){
             try{
-                String query = "select * from questions where grade=10";
+                String query = "select * from questions where grade=?";
                 PreparedStatement ps = jdbc.getConnection().prepareStatement(query);
+                ps.setString(1, grade);
                 ResultSet rs = ps.executeQuery();
                 while(rs.next()){
                     Question question = new Question();

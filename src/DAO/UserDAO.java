@@ -18,7 +18,6 @@ public class UserDAO implements DAOInterface<Teacher>{
     // Create a JDBCConnection onject to connect to database
     JDBCConnection jdbc = new JDBCConnection();
     
-    @Override
     public ArrayList<Teacher> getAll() {
         ArrayList<Teacher> teacherArr = new ArrayList<>();
         if(jdbc.openConnection()){

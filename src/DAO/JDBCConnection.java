@@ -11,7 +11,7 @@ import java.sql.*;
  * @author ACER
  */
 public class JDBCConnection {
-    private String dbUrl="jdbc:mySQL://localhost:3306/csdlnc";
+    private String dbUrl="jdbc:mysql://localhost:3306/csdlnc";
     private String username="root";
     private String password="123456";
     private Connection con;
@@ -28,8 +28,7 @@ public class JDBCConnection {
 			return false;
 		}
 	}
-    
-    
+
     // Close connection
     public void closeConnection(){
         try{

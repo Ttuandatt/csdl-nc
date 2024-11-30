@@ -110,14 +110,11 @@ public class TeacherView extends JFrame{
         
         
         //buttons
-        JButton grade10Button = new JButton("Grade 10");
-        buttonsPanel.add(grade10Button);
-        JButton grade11Button = new JButton("Grade 11");
-        buttonsPanel.add(grade11Button);
-        JButton grade12Button = new JButton("Grade 12");
-        buttonsPanel.add(grade12Button);
-        JButton createdExam = new JButton("Examinations created");
-        buttonsPanel.add(createdExam);
+        JButton examManaementButton = new JButton("Exam Management");
+        buttonsPanel.add(examManaementButton);
+        JButton questionManaementButton = new JButton("Question Management");
+        buttonsPanel.add(questionManaementButton);
+
         
         navBarPanel.add(buttonsPanel, BorderLayout.CENTER);
         
@@ -144,18 +141,17 @@ public class TeacherView extends JFrame{
 //        contentPanel.setPreferredSize(new Dimension(contentWidth, f.getHeight()));
 
         // Set identify of function buttons to define the GUI class
-        final String grade_10 = "GRADE_10";
-        final String grade_11 = "GRADE_11";
-        final String grade_12 = "GRADE_12";
+        final String question_management = "QUESTION";
+        final String exam_management = "EXAM";
     
-        // Add ActionListener & MouseListener for Grade 10 button
-        grade10Button.addActionListener(new ActionListener(){
+        // Add ActionListener & MouseListener for Exam management button
+        examManaementButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                Grade10 grade10 = new Grade10();
-                contentPanel.add(grade10, grade_10);
+                Exam exam = new Exam();
+                contentPanel.add(exam, exam_management);
                 CardLayout card = (CardLayout)contentPanel.getLayout();
-                card.show(contentPanel, grade_10);
+                card.show(contentPanel, exam_management);
             }
         });
         
