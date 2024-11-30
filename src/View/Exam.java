@@ -42,15 +42,17 @@ public class Exam extends JPanel{
     private ArrayList<Question> questArr = new ArrayList<>();
     private QuestionController questionController;
     private QuestionDAO questionDAO = new QuestionDAO();
-    JComboBox cb2;
+    JComboBox cb1, cb2, cb3;
     JLabel lbID, lbDate, lbGrade, lbClass, lbExamName, lbDuration, lbExamID, lbShowBy, lbTopic;
     JTextField tfID, tfDate, tfExamName, tfDuration, tfExamID, tfSearch;
     JButton buttonCreateExam, buttonCancel, buttonSearch, buttonRefresh;
+    ArrayList<String> topic = new ArrayList<>();
     public Exam(){
         initComponents();
         questionController = new QuestionController(questionDAO); // Initialize QuestionController
         loadQuestionList(); // Call method to load data into table
         loadSelectedQuestionList();
+        loadTopic();
     }
     
     public void initComponents() {
@@ -86,14 +88,14 @@ public class Exam extends JPanel{
         JPanel rightPanel = new JPanel(null);
         rightPanel.setBackground(Color.LIGHT_GRAY);
 
-        gbc.weightx = 0.6;
+        gbc.weightx = 0.5;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 0;
         upPanel.add(leftPanel, gbc);
 
-        gbc.weightx = 0.4;
+        gbc.weightx = 0.5;
         gbc.gridx = 1;
         upPanel.add(rightPanel, gbc);
 
@@ -129,15 +131,15 @@ public class Exam extends JPanel{
         rightPanel.add(lbGrade);
         //create combo box for grade
         String[] combo = {"10","11","12"};
-        JComboBox cb = new JComboBox(combo);
-        cb.setBounds(90, 70, 100, 20);
-        rightPanel.add(cb);
+        cb1 = new JComboBox(combo);
+        cb1.setBounds(90, 70, 100, 20);
+        rightPanel.add(cb1);
         
         lbExamName = new JLabel("Exam name:");
         lbExamName.setBounds(10, 100, 100, 20);
         rightPanel.add(lbExamName);
         tfExamName = new JTextField();
-        tfExamName.setBounds(90, 100, 200, 20);
+        tfExamName.setBounds(90, 100, 300, 20);
         rightPanel.add(tfExamName);
         
         lbTopic = new JLabel("Topic");
@@ -145,8 +147,8 @@ public class Exam extends JPanel{
         rightPanel.add(lbTopic);
         
         String[] combo3 = {"Topic"};
-        JComboBox cb3 = new JComboBox(combo3);
-        cb3.setBounds(90, 130, 200, 20);
+        cb3 = new JComboBox(combo3);
+        cb3.setBounds(90, 130, 470, 20);
         rightPanel.add(cb3);
         
         lbDuration = new JLabel("Duration");
@@ -163,6 +165,7 @@ public class Exam extends JPanel{
         tfExamID.setBounds(90, 190, 100, 20);
         tfExamID.setEditable(false);
         rightPanel.add(tfExamID);
+        
         
         buttonCancel = new JButton("Cancel");
         buttonCancel.setBounds(10, 230, 80, 20);
@@ -196,11 +199,19 @@ public class Exam extends JPanel{
         
         
 
-        //Configure actionListener for the button
+        //set actionListener for buttonCreateExam
         buttonCreateExam.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 addPerformed(tableQuest);
+            }
+        });
+        
+        //set actionListener for buttonCancel
+        buttonCancel.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                refreshInfoPerformed(tableQuest);
             }
         });
         
@@ -224,7 +235,7 @@ public class Exam extends JPanel{
         buttonRefresh.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                refreshPerformed(tableQuest);
+                refreshSearchPerformed(tableQuest);
             }
         });
         
@@ -306,7 +317,7 @@ public class Exam extends JPanel{
         //Customize size of columns
         TableColumnModel columnModel = tableSelectedQuest.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
-        columnModel.getColumn(1).setPreferredWidth(720);
+        columnModel.getColumn(1).setPreferredWidth(600);
     }
 
     public void addPerformed(JTable tb){
@@ -355,11 +366,23 @@ public class Exam extends JPanel{
         tb.setModel(searchModel);
     }
 
-    public void refreshPerformed(JTable tb){
+    public void refreshSearchPerformed(JTable tb){
         questionModel.setRowCount(0);
         loadQuestionList();
         tfSearch.setText("");
         cb2.setSelectedItem("10");
+    }
+    
+    public void refreshInfoPerformed(JTable tb){
+        questionModel.setRowCount(0);
+        loadQuestionList();
+        tfExamName.setText("");
+        tfDuration.setText("");
+        tfExamID.setText("");
+        cb1.setSelectedItem("10");
+        cb2.setSelectedItem("10");
+        cb3.setSelectedItem(topic.get(0)); //Lấy phần tử đầu trong ArrayList topic
+        
     }
     
     public void addToSelectedQuestionTable(String id, String content){
@@ -374,6 +397,14 @@ public class Exam extends JPanel{
         //Add new row to tableSelectedQuest
         Object[] row = {id, content};
         selectedQuestionModel.addRow(row);
+    }
+    
+    public void loadTopic(){
+        topic = questionDAO.getTopic(); // Lấy danh sách topic từ QuestionDAO
+        cb3.removeAllItems(); // Xóa các mục cũ trong combobox
+        for(String topicName: topic){
+            cb3.addItem(topicName); // Thêm các topic vào combobox
+        }
     }
     
 }

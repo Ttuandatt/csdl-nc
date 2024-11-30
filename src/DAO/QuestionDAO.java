@@ -48,6 +48,8 @@ public class QuestionDAO implements DAOInterface<Question>{
                 }
             }catch(Exception e){
                 e.printStackTrace();
+            }finally{
+                jdbc.closeConnection();
             }
         }
         return quesArr;
@@ -57,14 +59,16 @@ public class QuestionDAO implements DAOInterface<Question>{
         ArrayList<String> topicArr = new ArrayList<>();
         if(jdbc.openConnection()){
             try{
-                String query = "select * from topics";
+                String query = "select topicName from topics";
                 PreparedStatement ps = jdbc.getConnection().prepareStatement(query);
                 ResultSet rs = ps.executeQuery();
                 while(rs.next()){
-                    
+                    topicArr.add(rs.getString("topicName"));
                 }
             }catch(Exception e){
                 e.printStackTrace();
+            }finally{
+                jdbc.closeConnection();
             }
         }
         return topicArr;
