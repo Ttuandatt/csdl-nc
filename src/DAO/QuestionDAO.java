@@ -53,6 +53,22 @@ public class QuestionDAO implements DAOInterface<Question>{
         return quesArr;
     }
 
+    public ArrayList<String> getTopic(){
+        ArrayList<String> topicArr = new ArrayList<>();
+        if(jdbc.openConnection()){
+            try{
+                String query = "select * from topics";
+                PreparedStatement ps = jdbc.getConnection().prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return topicArr;
+    }
     @Override
     public Question getByID(String d) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

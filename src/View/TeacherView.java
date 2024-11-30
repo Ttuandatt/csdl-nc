@@ -110,6 +110,8 @@ public class TeacherView extends JFrame{
         
         
         //buttons
+        JButton createExamButton = new JButton("Create Exam");
+        buttonsPanel.add(createExamButton);
         JButton examManaementButton = new JButton("Exam Management");
         buttonsPanel.add(examManaementButton);
         JButton questionManaementButton = new JButton("Question Management");
@@ -145,7 +147,7 @@ public class TeacherView extends JFrame{
         final String exam_management = "EXAM";
     
         // Add ActionListener & MouseListener for Exam management button
-        examManaementButton.addActionListener(new ActionListener(){
+        createExamButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 Exam exam = new Exam();

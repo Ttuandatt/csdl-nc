@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
@@ -42,7 +43,7 @@ public class Exam extends JPanel{
     private QuestionController questionController;
     private QuestionDAO questionDAO = new QuestionDAO();
     JComboBox cb2;
-    JLabel lbID, lbDate, lbGrade, lbClass, lbExamName, lbDuration, lbExamID, lbShowBy;
+    JLabel lbID, lbDate, lbGrade, lbClass, lbExamName, lbDuration, lbExamID, lbShowBy, lbTopic;
     JTextField tfID, tfDate, tfExamName, tfDuration, tfExamID, tfSearch;
     JButton buttonCreateExam, buttonCancel, buttonSearch, buttonRefresh;
     public Exam(){
@@ -139,27 +140,36 @@ public class Exam extends JPanel{
         tfExamName.setBounds(90, 100, 200, 20);
         rightPanel.add(tfExamName);
         
+        lbTopic = new JLabel("Topic");
+        lbTopic.setBounds(10, 130, 100,20);
+        rightPanel.add(lbTopic);
+        
+        String[] combo3 = {"Topic"};
+        JComboBox cb3 = new JComboBox(combo3);
+        cb3.setBounds(90, 130, 200, 20);
+        rightPanel.add(cb3);
+        
         lbDuration = new JLabel("Duration");
-        lbDuration.setBounds(10, 130, 100, 20);
+        lbDuration.setBounds(10, 160, 100, 20);
         rightPanel.add(lbDuration);
         tfDuration = new JTextField();
-        tfDuration.setBounds(90, 130, 100, 20);
+        tfDuration.setBounds(90, 160, 100, 20);
         rightPanel.add(tfDuration);
         
         lbExamID = new JLabel("Exam ID:");
-        lbExamID.setBounds(10, 160, 100, 20);
+        lbExamID.setBounds(10, 190, 100, 20);
         rightPanel.add(lbExamID);
         tfExamID = new JTextField();
-        tfExamID.setBounds(90, 160, 100, 20);
+        tfExamID.setBounds(90, 190, 100, 20);
         tfExamID.setEditable(false);
         rightPanel.add(tfExamID);
         
         buttonCancel = new JButton("Cancel");
-        buttonCancel.setBounds(10, 200, 80, 20);
+        buttonCancel.setBounds(10, 230, 80, 20);
         rightPanel.add(buttonCancel);
         
         buttonCreateExam = new JButton("Create");
-        buttonCreateExam.setBounds(100, 200, 80, 20);
+        buttonCreateExam.setBounds(100, 230, 80, 20);
         rightPanel.add(buttonCreateExam);
         
         lbShowBy = new JLabel("Show by:");
@@ -182,6 +192,9 @@ public class Exam extends JPanel{
         buttonRefresh = new JButton("Refresh");
         buttonRefresh.setBounds(425, 280, 80, 20);
         rightPanel.add(buttonRefresh);
+        
+        
+        
 
         //Configure actionListener for the button
         buttonCreateExam.addActionListener(new ActionListener(){
@@ -353,6 +366,7 @@ public class Exam extends JPanel{
         //Check if ID already exists in tableSelectedQuest
         for(int i=0;i<selectedQuestionModel.getRowCount();i++){
             if(selectedQuestionModel.getValueAt(i,0).toString().equals(id)){
+                JOptionPane.showMessageDialog(this, "Question selected");
                 return;
             }
         }
