@@ -16,13 +16,13 @@ public class Exam {
     private int grade;
     private String examName;
     private Date createdDate;
+    private int creatorId;
     private String status;
-    private String creatorId;
     
     //Constructor
     public Exam(){}
 
-    public Exam(String examId, String duration, int grade, String examName, Date createdDate, String status, String creatorId) {
+    public Exam(String examId, String duration, int grade, String examName, Date createdDate, int creatorId, String status) {
         this.examId = examId;
         this.duration = duration;
         this.grade = grade;
@@ -80,11 +80,11 @@ public class Exam {
         this.status = status;
     }
 
-    public String getCreatorId() {
+    public int getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(String creatorId) {
+    public void setCreatorId(int creatorId) {
         this.creatorId = creatorId;
     }
     

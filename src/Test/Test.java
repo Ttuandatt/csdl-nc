@@ -41,7 +41,7 @@ public class Test {
 //    }
     
     public static void main(String[] args){
-        TeacherView view = new TeacherView();
+//        TeacherView view = new TeacherView();
 //        view.initComponents();
     }
 }

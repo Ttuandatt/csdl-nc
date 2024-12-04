@@ -5,7 +5,7 @@
 package Controller;
 
 import Model.Question;
-import View.Exam;
+import View.ExamView;
 import DAO.QuestionDAO;
 import java.util.ArrayList;
 /**

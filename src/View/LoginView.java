@@ -6,13 +6,20 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
-
-public class Login extends JFrame {
+import Controller.LoginController;
+import Controller.TeacherController;
+import Model.Teacher;
+import View.TeacherView;
+import View.AdminView;
+public class LoginView extends JFrame {
     JPanel pnLeft, pnRight;
     JLabel lblImage, lblLoginBanner;
     InputForm txtUsername, txtPassword;
-
-    public Login() {
+    private LoginController loginController;
+    private TeacherController teacherController;
+    
+    public LoginView() {
+        loginController = new LoginController(); // Khởi tạo LoginController
         initComponent();
         txtUsername.setText("");
         txtPassword.setText("");
@@ -67,7 +74,7 @@ public class Login extends JFrame {
         pnlLogIn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                login();
+                login(); // Gọi phương thức login khi nhấn nút Login
             }
         });
         pnRight.add(pnlLogIn);
@@ -76,17 +83,36 @@ public class Login extends JFrame {
     }
 
     private void login() {
-        String username = txtUsername.getText();
-        if (username.equals("admin")) {
-            JOptionPane.showMessageDialog(this, "Welcome, admin!");
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Invalid username.");
+    String email = txtUsername.getText();
+    String password = txtPassword.getText();
+
+    int result = loginController.login(email, password);
+    if (result == 1) {
+        Teacher teacher = loginController.getUserInfo(email, password);
+        JOptionPane.showMessageDialog(this, "Welcome, " + teacher.getTeacherName() + "!");
+        this.dispose(); // Đóng cửa sổ LoginView
+
+        // Hiển thị TeacherView
+        if ("teacher".equalsIgnoreCase(teacher.getRole())) {
+            TeacherView teacherView = new TeacherView(teacher);
+            System.out.println(teacherView.getTeacherID() + ", I'm at line 98 of LoginView");
+            teacherController = new TeacherController(teacher, teacherView);
+            teacherController.transferData(teacherView.getTeacherID());
+        }else if ("admin".equalsIgnoreCase(teacher.getRole())) {
+//            AdminView adminView = new AdminView(teacher);
+//            adminView.setVisible(true); // Hiển thị AdminView
         }
+    } else if (result == 2) {
+        JOptionPane.showMessageDialog(this, "Username or password incorrect");
+    } else {
+        JOptionPane.showMessageDialog(this, "An error occurred. Please try again later.");
     }
+}
+
+
 
     public static void main(String[] args) {
-        Login newLogin = new Login();
+        LoginView newLogin = new LoginView();
         newLogin.setVisible(true);
     }
 }

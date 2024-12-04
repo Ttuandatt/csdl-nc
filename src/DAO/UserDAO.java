@@ -75,4 +75,52 @@ public class UserDAO implements DAOInterface<Teacher>{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    public int checkLoginAndGetInfo(String email, String password) {
+    if (jdbc.openConnection()) {
+        try {
+            String query = "SELECT * FROM users WHERE gmail = ? AND password = ?";
+            PreparedStatement ps = jdbc.getConnection().prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return 1; // Đăng nhập thành công.
+            } else {
+                return 2; // Sai thông tin.
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            jdbc.closeConnection();
+        }
+    }
+    return 0; // Lỗi kết nối.
+}
+
+    public Teacher getUserInfo(String email, String password) {
+        Teacher teacher = null;
+        if (jdbc.openConnection()) {
+            try {
+                String query = "SELECT * FROM users WHERE gmail = ? AND password = ?";
+                PreparedStatement ps = jdbc.getConnection().prepareStatement(query);
+                ps.setString(1, email);
+                ps.setString(2, password);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    teacher = new Teacher();
+                    teacher.setTeacherId(rs.getString("userID"));
+                    teacher.setTeacherName(rs.getString("userName"));
+                    teacher.setRole(rs.getString("role"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                jdbc.closeConnection();
+            }
+        }
+        return teacher;
+    }
+    
+
+    
 }

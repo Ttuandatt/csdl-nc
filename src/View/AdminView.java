@@ -4,7 +4,6 @@
  */
 package View;
 
-import Controller.TeacherController;
 import Model.Teacher;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -16,33 +15,28 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 
 /**
  *
  * @author ACER
  */
-public class TeacherView extends JFrame{
+public class AdminView {
     JLabel lbId, dataId, lbName, dataName, lbRole, dataRole;
     private Teacher teacher;
-    private TeacherController teacherController;
+    
     // Constructor nhận thông tin Teacher từ LoginView
-    public TeacherView(Teacher teacher) {
+    public AdminView(Teacher teacher) {
         this.teacher = teacher;  // Lưu thông tin teacher
         initComponents();
         updateView();  // Cập nhật giao diện với thông tin của giáo viên
     }
     
     public void initComponents(){
-        JFrame f = new JFrame("Teacher view");
+        JFrame f = new JFrame("Admin view");
         f.setSize(1500, 800);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -167,6 +161,8 @@ public class TeacherView extends JFrame{
         f.setVisible(true);
     }
     
+    
+    
     // Cập nhật giao diện với thông tin người dùng
     public void updateView() {
         if (teacher != null) {
@@ -176,22 +172,11 @@ public class TeacherView extends JFrame{
         }
     }
     
-    public String getTeacherID(){
-        return teacher.getTeacherId();
+    public static void main(String[] args){
+        Teacher teacher = new Teacher();
+        teacher.setTeacherId("Danny");
+        teacher.setTeacherName("TunDat");
+        teacher.setRole("Husband");
+        AdminView adminView = new AdminView(teacher);
     }
-    
-    
-//    public void transferTeacherIDToLoginControlelr(String id){
-//        loginController.transferDataToExamView(id);
-//    }
-//    public static void main(String[] args){
-//        Teacher teacher = new Teacher();
-//        teacher.setTeacherId("Emily");
-//        teacher.setTeacherName("Son Thanh Ngan");
-//        teacher.setRole("My wife");
-//        TeacherView view = new TeacherView(teacher);
-//         
-//        System.out.println(view.getTeacherID() + "hehe");
-////        view.initComponents();
-//    }
 }

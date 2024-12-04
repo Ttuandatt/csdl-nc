@@ -4,6 +4,7 @@
  */
 package View;
 
+import Controller.ExamController;
 import Model.Question;
 import DAO.QuestionDAO;
 import java.awt.BorderLayout;
@@ -18,23 +19,31 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import Controller.QuestionController;
+import Controller.LoginController;
+import Model.Exam;
+import Model.Teacher;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.table.TableColumnModel;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /**
  *
  * @author ACER
  */
-public class Exam extends JPanel{
+public class ExamView extends JPanel{
     JTable tableQuest = new JTable();
     JTable tableSelectedQuest = new JTable();
     DefaultTableModel questionModel = new DefaultTableModel();
@@ -42,17 +51,23 @@ public class Exam extends JPanel{
     private ArrayList<Question> questArr = new ArrayList<>();
     private QuestionController questionController;
     private QuestionDAO questionDAO = new QuestionDAO();
-    JComboBox cb1, cb2, cb3;
+    JComboBox cb1, cb2;
     JLabel lbID, lbDate, lbGrade, lbClass, lbExamName, lbDuration, lbExamID, lbShowBy, lbTopic;
-    JTextField tfID, tfDate, tfExamName, tfDuration, tfExamID, tfSearch;
-    JButton buttonCreateExam, buttonCancel, buttonSearch, buttonRefresh;
+    JTextField tfDate, tfExamName, tfDuration, tfExamID, tfSearch;
+    JTextField tfID = new JTextField();
+    JButton buttonCreateExam, buttonCancel, buttonSearch, buttonRefresh, buttonOK;
+    JRadioButton buttonPublic, buttonPrivate;
     ArrayList<String> topic = new ArrayList<>();
-    public Exam(){
+    LoginController loginController = new LoginController();
+    ExamController examController = new ExamController();
+    
+    public ExamView(String teacherID){
         initComponents();
         questionController = new QuestionController(questionDAO); // Initialize QuestionController
         loadQuestionList(); // Call method to load data into table
         loadSelectedQuestionList();
-        loadTopic();
+//        loadTopic();
+        setTeacherID(teacherID); // Gán ID vào textfield
     }
     
     public void initComponents() {
@@ -107,10 +122,11 @@ public class Exam extends JPanel{
         lbID = new JLabel("Creator ID:");
         lbID.setBounds(10, 10, 100, 20);
         rightPanel.add(lbID);
-        tfID = new JTextField();
         tfID.setBounds(90, 10, 100, 20);
         tfID.setEditable(false);
         rightPanel.add(tfID);
+//        tfID.setText(loginController.transferDataToExamView());
+        
         
         lbDate = new JLabel("Create date:");
         lbDate.setBounds(10, 40, 100, 20);
@@ -142,37 +158,43 @@ public class Exam extends JPanel{
         tfExamName.setBounds(90, 100, 300, 20);
         rightPanel.add(tfExamName);
         
-        lbTopic = new JLabel("Topic");
-        lbTopic.setBounds(10, 130, 100,20);
-        rightPanel.add(lbTopic);
-        
-        String[] combo3 = {"Topic"};
-        cb3 = new JComboBox(combo3);
-        cb3.setBounds(90, 130, 470, 20);
-        rightPanel.add(cb3);
+//        lbTopic = new JLabel("Topic");
+//        lbTopic.setBounds(10, 100, 100,20);
+//        rightPanel.add(lbTopic);
+//        
+//        String[] combo3 = {"Topic"};
+//        cb3 = new JComboBox(combo3);
+//        cb3.setBounds(90, 100, 470, 20);
+//        rightPanel.add(cb3);
         
         lbDuration = new JLabel("Duration");
-        lbDuration.setBounds(10, 160, 100, 20);
+        lbDuration.setBounds(10, 130, 100, 20);
         rightPanel.add(lbDuration);
         tfDuration = new JTextField();
-        tfDuration.setBounds(90, 160, 100, 20);
+        tfDuration.setBounds(90, 130, 100, 20);
         rightPanel.add(tfDuration);
         
         lbExamID = new JLabel("Exam ID:");
-        lbExamID.setBounds(10, 190, 100, 20);
+        lbExamID.setBounds(10, 160, 100, 20);
         rightPanel.add(lbExamID);
-        tfExamID = new JTextField();
-        tfExamID.setBounds(90, 190, 100, 20);
+        tfExamID = new JTextField("");
+        tfExamID.setBounds(90, 160, 100, 20);
         tfExamID.setEditable(false);
         rightPanel.add(tfExamID);
         
         
+        
+        
+        buttonOK = new JButton("OK");
+        buttonOK.setBounds(10, 190, 80, 20);
+        rightPanel.add(buttonOK);
+        
         buttonCancel = new JButton("Cancel");
-        buttonCancel.setBounds(10, 230, 80, 20);
+        buttonCancel.setBounds(100, 190, 80, 20);
         rightPanel.add(buttonCancel);
         
         buttonCreateExam = new JButton("Create");
-        buttonCreateExam.setBounds(100, 230, 80, 20);
+        buttonCreateExam.setBounds(190, 190, 80, 20);
         rightPanel.add(buttonCreateExam);
         
         lbShowBy = new JLabel("Show by:");
@@ -197,8 +219,18 @@ public class Exam extends JPanel{
         rightPanel.add(buttonRefresh);
         
         
+        buttonPublic = new JRadioButton("Public");
+        buttonPublic.setBounds(300, 10, 90, 20);
+        rightPanel.add(buttonPublic);
+        buttonPrivate = new JRadioButton("Private");
+        buttonPrivate.setBounds(380, 10, 90, 20);
+        rightPanel.add(buttonPrivate);
         
-
+        // Nhóm các radio button lại với nhau, chỉ có thể chọn 1 trong hai radio button
+        ButtonGroup group = new ButtonGroup();
+        group.add(buttonPublic);
+        group.add(buttonPrivate);
+        
         //set actionListener for buttonCreateExam
         buttonCreateExam.addActionListener(new ActionListener(){
             @Override
@@ -212,6 +244,7 @@ public class Exam extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e){
                 refreshInfoPerformed(tableQuest);
+                refreshSelectedQuestion(tableSelectedQuest);
             }
         });
         
@@ -254,6 +287,19 @@ public class Exam extends JPanel{
             }
         });
         
+        // ActionListener cho cb1 để cập nhật ExamID khi Grade thay đổi
+        buttonOK.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                tfExamID.setText("");
+                String teacherID = tfID.getText();
+                String grade = cb1.getSelectedItem().toString();
+                String duration = tfDuration.getText();
+                tfExamID.setText(createExamID(teacherID, grade, duration));
+                System.out.println(tfExamID.getText());
+            }
+        });
+        
     }   
 
 
@@ -283,7 +329,7 @@ public class Exam extends JPanel{
         columnModel.getColumn(5).setPreferredWidth(130);
         columnModel.getColumn(6).setPreferredWidth(10);
         columnModel.getColumn(7).setPreferredWidth(10);
-        columnModel.getColumn(7).setPreferredWidth(10);
+        columnModel.getColumn(8).setPreferredWidth(10);
         
         // Lấy giá trị được chọn từ combo box cb2
         String selectedGrade = cb2.getSelectedItem().toString();
@@ -317,10 +363,37 @@ public class Exam extends JPanel{
         //Customize size of columns
         TableColumnModel columnModel = tableSelectedQuest.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(50);
-        columnModel.getColumn(1).setPreferredWidth(600);
+        columnModel.getColumn(1).setPreferredWidth(900);
     }
 
     public void addPerformed(JTable tb){
+        Exam exam = new Exam();
+        exam.setExamId(tfExamID.getText());
+        exam.setDuration(tfDuration.getText());
+        exam.setGrade(Integer.parseInt(cb1.getSelectedItem().toString()));
+        exam.setExamName(tfExamName.getText());
+        // Chuyển đổi tfDate sang java.sql.Date
+        String dateString = tfDate.getText(); // Lấy giá trị chuỗi từ tfDate
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày tháng
+        try {
+            java.util.Date parsedDate = dateFormat.parse(dateString); // Parse chuỗi sang java.util.Date
+            java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime()); // Chuyển sang java.sql.Date
+            exam.setCreatedDate(sqlDate); // Đặt giá trị vào exam
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Bạn có thể thêm xử lý lỗi nếu cần, ví dụ hiển thị thông báo lỗi
+        }
+        // Lấy giá trị của radio button (Public/Private)
+        String status = "Private";  //Mặc định là Private
+        if(buttonPublic.isSelected())
+            status = "Public";
+        exam.setStatus(status);
+        exam.setCreatorId(Integer.parseInt(tfID.getText()));
+        
+        if(examController.addExam(exam))
+            JOptionPane.showMessageDialog(this, "Create Exam successfully!!");
+        else
+            JOptionPane.showMessageDialog(this, "Create Exam failed!!");
         
     }
     
@@ -381,8 +454,12 @@ public class Exam extends JPanel{
         tfExamID.setText("");
         cb1.setSelectedItem("10");
         cb2.setSelectedItem("10");
-        cb3.setSelectedItem(topic.get(0)); //Lấy phần tử đầu trong ArrayList topic
+//        cb3.setSelectedItem(topic.get(0)); //Lấy phần tử đầu trong ArrayList topic
         
+    }
+    
+    public void refreshSelectedQuestion(JTable tb){
+        selectedQuestionModel.setRowCount(0);
     }
     
     public void addToSelectedQuestionTable(String id, String content){
@@ -399,12 +476,24 @@ public class Exam extends JPanel{
         selectedQuestionModel.addRow(row);
     }
     
-    public void loadTopic(){
-        topic = questionDAO.getTopic(); // Lấy danh sách topic từ QuestionDAO
-        cb3.removeAllItems(); // Xóa các mục cũ trong combobox
-        for(String topicName: topic){
-            cb3.addItem(topicName); // Thêm các topic vào combobox
-        }
+//    public void loadTopic(){
+//        topic = questionDAO.getTopic(); // Lấy danh sách topic từ QuestionDAO
+//        cb3.removeAllItems(); // Xóa các mục cũ trong combobox
+//        for(String topicName: topic){
+//            cb3.addItem(topicName); // Thêm các topic vào combobox
+//        }
+//    }
+    
+    public void setTeacherID(String teacherID){
+        tfID.setText(teacherID);
+        System.out.println(tfID.getText() + ", I'm tfID of ExamView, at line 421 of setTeacherID() method");
     }
     
+    public String createExamID(String creatorID, String grade, String duration){
+         String prefix = "TC" + creatorID + "G" + grade + "D" + duration;
+        Random ran = new Random();
+        int randomNum = ran.nextInt(1000); // Tạo số ngẫu nhiên trong khoảng [0, 999]
+        String examID = prefix + String.format("%3d",randomNum);
+        return examID;
+    }
 }

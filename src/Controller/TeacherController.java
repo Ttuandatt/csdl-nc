@@ -4,7 +4,10 @@
  */
 package Controller;
 import Model.Teacher;
+import Model.Exam;
+//import 
 import View.TeacherView;
+import View.ExamView;
 import java.sql.Date;
 /**
  *
@@ -14,11 +17,15 @@ public class TeacherController {
     // declaring the variables model and view  
     private Teacher model;
     private TeacherView view;
-
+    
+    
     // constructor to initialize  
     public TeacherController(Teacher model, TeacherView view){
         this.model = model;
         this.view = view;
+    }
+    public TeacherController(){
+        
     }
     
     //get, set
@@ -84,6 +91,15 @@ public class TeacherController {
 //        view.TeacherView(model.getTeacherId(), model.getTeacherName(), model.getRole());
         view.initComponents();
     }
+    
+    public void transferData(String id) {
+        ExamView examView = new ExamView(id);
+        examView.setTeacherID(id); // Gán giá trị id
+        System.out.println(id + ", I'm at line 99 of TeacherController");
+    }
+    
+
+    
 }
 
 
