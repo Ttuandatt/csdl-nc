@@ -27,7 +27,7 @@ public class QuestionDAO implements DAOInterface<Question>{
                 ResultSet rs = ps.executeQuery();
                 while(rs.next()){
                     Question question = new Question();
-                    question.setQuestionID(rs.getString(1));
+                    question.setQuestionID(rs.getInt(1));
                     question.setQuestionContent(rs.getString(2));
                     question.setAnswer1(rs.getString(3));
                     question.setAnswer2(rs.getString(4));
@@ -39,9 +39,9 @@ public class QuestionDAO implements DAOInterface<Question>{
                     question.setCreatedDate(rs.getDate(10));
                     question.setDataSource(rs.getString(11));
                     question.setStatus(rs.getString(12));
-                    question.setCreatedBy(rs.getString(13));
-                    question.setVerifiedBy(rs.getString(14));
-                    question.setTopicID(rs.getString(15));
+                    question.setCreatedBy(rs.getInt(13));
+                    question.setVerifiedBy(rs.getInt(14));
+                    question.setTopicID(rs.getInt(15));
                     
                     quesArr.add(question);
                 
@@ -73,6 +73,24 @@ public class QuestionDAO implements DAOInterface<Question>{
         }
         return topicArr;
     }
+
+    public int getQuestionOrder(){
+        int order = 0;
+        if(jdbc.openConnection()){
+            try{
+                String query = "SELECT questionID FROM questions ORDER BY questionID DESC LIMIT 1";
+                ResultSet rs = jdbc.getConnection().prepareStatement(query).executeQuery();
+                if(rs.next()){
+                    order = rs.getInt(1) + 1;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                jdbc.closeConnection();
+            }
+        }
+        return order;
+    }
     @Override
     public Question getByID(String d) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -85,7 +103,36 @@ public class QuestionDAO implements DAOInterface<Question>{
 
     @Override
     public boolean add(Question d) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        boolean result = false;
+        if(jdbc.openConnection()){
+            try{
+                String query = "insert into questions values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                PreparedStatement ps = jdbc.getConnection().prepareStatement(query);
+                ps.setInt(1, d.getQuestionID());
+                ps.setString(2, d.getQuestionContent());
+                ps.setString(3, d.getAnswer1());
+                ps.setString(4, d.getAnswer2());
+                ps.setString(5, d.getAnswer3());
+                ps.setString(6, d.getAnswer4());
+                ps.setString(7, d.getCorrectAnswer());
+                ps.setInt(8, d.getGrade());
+                ps.setString(9, d.getQuestionType());
+                ps.setDate(10, d.getCreatedDate());
+                ps.setString(11, d.getDataSource());
+                ps.setString(12, d.getStatus());
+                ps.setInt(13, d.getCreatedBy());
+                ps.setNull(14, java.sql.Types.INTEGER);
+                ps.setInt(15, d.getTopicID());
+
+                if(ps.executeUpdate()>0)
+                    result = true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                jdbc.closeConnection();
+            }
+        }
+        return result;
     }
 
     @Override

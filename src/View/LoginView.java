@@ -1,5 +1,6 @@
 package View;
 
+import Controller.AdminController;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import java.awt.*;
@@ -9,15 +10,14 @@ import javax.swing.*;
 import Controller.LoginController;
 import Controller.TeacherController;
 import Model.Teacher;
-import View.TeacherView;
-import View.AdminView;
+
 public class LoginView extends JFrame {
     JPanel pnLeft, pnRight;
     JLabel lblImage, lblLoginBanner;
     InputForm txtUsername, txtPassword;
     private LoginController loginController;
     private TeacherController teacherController;
-    
+    private AdminController adminController;
     public LoginView() {
         loginController = new LoginController(); // Khởi tạo LoginController
         initComponent();
@@ -32,7 +32,7 @@ public class LoginView extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 0));
         this.setTitle("Login");
-        this.setResizable(false);
+         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Left panel with image
@@ -95,12 +95,14 @@ public class LoginView extends JFrame {
         // Hiển thị TeacherView
         if ("teacher".equalsIgnoreCase(teacher.getRole())) {
             TeacherView teacherView = new TeacherView(teacher);
-            System.out.println(teacherView.getTeacherID() + ", I'm at line 98 of LoginView");
+            System.out.println(teacherView.getTeacherID() + ", I'm at line 97 of LoginView. I'm TeacherView");
             teacherController = new TeacherController(teacher, teacherView);
             teacherController.transferData(teacherView.getTeacherID());
         }else if ("admin".equalsIgnoreCase(teacher.getRole())) {
-//            AdminView adminView = new AdminView(teacher);
-//            adminView.setVisible(true); // Hiển thị AdminView
+            AdminView adminView = new AdminView(teacher);
+            System.out.println(adminView.getTeacherID() + ", I'm at line 103 of LoginView. I'm AdminView");
+            adminController = new AdminController(teacher, adminView);
+            adminController.transferData(adminView.getTeacherID());
         }
     } else if (result == 2) {
         JOptionPane.showMessageDialog(this, "Username or password incorrect");

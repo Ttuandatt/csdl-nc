@@ -4,10 +4,9 @@
  */
 package Controller;
 import Model.Teacher;
-import Model.Exam;
-//import 
-import View.TeacherView;
-import View.ExamView;
+//import
+import View.*;
+
 import java.sql.Date;
 /**
  *
@@ -16,17 +15,19 @@ import java.sql.Date;
 public class TeacherController {
     // declaring the variables model and view  
     private Teacher model;
-    private TeacherView view;
+    private TeacherView Teacherview;
+    private AdminView Adminview;
     
-    
-    // constructor to initialize  
-    public TeacherController(Teacher model, TeacherView view){
+    // constructor to initialize for teacher
+    public TeacherController(Teacher model, TeacherView Teacherview){
         this.model = model;
-        this.view = view;
+        this.Teacherview = Teacherview;
     }
     public TeacherController(){
         
     }
+
+
     
     //get, set
     public String getTeacherId(){
@@ -87,14 +88,19 @@ public class TeacherController {
     
     
     //method to update the data to view
-    public void updateView(){
+    public void updateTeacherView(){
 //        view.TeacherView(model.getTeacherId(), model.getTeacherName(), model.getRole());
-        view.initComponents();
+        Teacherview.initComponents();
     }
     
     public void transferData(String id) {
-        ExamView examView = new ExamView(id);
-        examView.setTeacherID(id); // Gán giá trị id
+        CreateExamView createExamView = new CreateExamView(id);
+        createExamView.setTeacherID(id); // Gán giá trị id
+        CreateQuestionView createQuestionView = new CreateQuestionView(id);
+        createQuestionView.setTeacherID(id);
+        ManageExamView manageExamView = new ManageExamView(id);
+
+
         System.out.println(id + ", I'm at line 99 of TeacherController");
     }
     

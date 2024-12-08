@@ -10,7 +10,7 @@ import java.sql.Date;
  * @author ACER
  */
 public class Question {
-    private String questionID;
+    private int questionID;
     private String questionContent;
     private String answer1;
     private String answer2;
@@ -22,16 +22,16 @@ public class Question {
     private Date createdDate;
     private String dataSource;
     private String status;
-    private String createdBy;
-    private String verifiedBy;
-    private String topicID;
+    private int createdBy;
+    private int verifiedBy;
+    private int topicID;
     
     //Constructor
     public Question(){
         
     }
 
-    public Question(String questionID, String questionContent, String answer1, String answer2, String answer3, String answer4, String correctAnswer, int grade, String questionType, Date createdDate, String dataSource, String status, String createdBy, String verifiedBy, String topicID) {
+    public Question(int questionID, String questionContent, String answer1, String answer2, String answer3, String answer4, String correctAnswer, int grade, String questionType, Date createdDate, String dataSource, String status, int createdBy, int verifiedBy, int topicID) {
         this.questionID = questionID;
         this.questionContent = questionContent;
         this.answer1 = answer1;
@@ -52,11 +52,11 @@ public class Question {
     
     //getter, setter
 
-    public String getQuestionID() {
+    public int getQuestionID() {
         return questionID;
     }
 
-    public void setQuestionID(String questionID) {
+    public void setQuestionID(int questionID) {
         this.questionID = questionID;
     }
 
@@ -148,27 +148,27 @@ public class Question {
         this.status = status;
     }
 
-    public String getCreatedBy() {
+    public int getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
 
-    public String getVerifiedBy() {
+    public int getVerifiedBy() {
         return verifiedBy;
     }
 
-    public void setVerifiedBy(String verifiedBy) {
+    public void setVerifiedBy(int verifiedBy) {
         this.verifiedBy = verifiedBy;
     }
 
-    public String getTopicID() {
+    public int getTopicID() {
         return topicID;
     }
 
-    public void setTopicID(String topicID) {
+    public void setTopicID(int topicID) {
         this.topicID = topicID;
     }
     

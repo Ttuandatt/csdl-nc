@@ -8,5 +8,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mysql-connector-j-8.3.0" level="project" />
+    <orderEntry type="library" name="flatlaf-3.0" level="project" />
+    <orderEntry type="library" name="flatlaf-extras-3.1" level="project" />
+    <orderEntry type="library" name="flatlaf-fonts-roboto-2.137" level="project" />
+    <orderEntry type="library" name="svgSalamander-1.1.4" level="project" />
   </component>
 </module>

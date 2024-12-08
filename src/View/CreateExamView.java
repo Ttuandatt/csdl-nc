@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import Controller.QuestionController;
 import Controller.LoginController;
 import Model.Exam;
-import Model.Teacher;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.table.TableColumnModel;
@@ -43,7 +43,7 @@ import javax.swing.JTextField;
  *
  * @author ACER
  */
-public class ExamView extends JPanel{
+public class CreateExamView extends JPanel{
     JTable tableQuest = new JTable();
     JTable tableSelectedQuest = new JTable();
     DefaultTableModel questionModel = new DefaultTableModel();
@@ -61,7 +61,7 @@ public class ExamView extends JPanel{
     LoginController loginController = new LoginController();
     ExamController examController = new ExamController();
     
-    public ExamView(String teacherID){
+    public CreateExamView(String teacherID){
         initComponents();
         questionController = new QuestionController(questionDAO); // Initialize QuestionController
         loadQuestionList(); // Call method to load data into table
@@ -77,7 +77,7 @@ public class ExamView extends JPanel{
         JPanel upPanel = new JPanel(new GridBagLayout());
         upPanel.setBackground(Color.CYAN);
         JPanel downPanel = new JPanel(new BorderLayout());
-        downPanel.setBackground(Color.GREEN);
+        downPanel.setBackground(Color.white);
 
         // GridBagConstraints for upPanel
         GridBagConstraints gbc = new GridBagConstraints();
@@ -99,9 +99,9 @@ public class ExamView extends JPanel{
 
         // Split upPanel into 2 parts by adding 2 panels: leftPanel & rightPanel
         JPanel leftPanel = new JPanel(new BorderLayout());
-        leftPanel.setBackground(Color.DARK_GRAY);
+        leftPanel.setBackground(Color.white);
         JPanel rightPanel = new JPanel(null);
-        rightPanel.setBackground(Color.LIGHT_GRAY);
+        rightPanel.setBackground(Color.decode("#EBFCFF"));
 
         gbc.weightx = 0.5;
         gbc.weighty = 1.0;
@@ -126,12 +126,17 @@ public class ExamView extends JPanel{
         tfID.setEditable(false);
         rightPanel.add(tfID);
 //        tfID.setText(loginController.transferDataToExamView());
-        
-        
-        lbDate = new JLabel("Create date:");
+
+
+        try {
+            lbDate = new JLabel("Create date:");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         lbDate.setBounds(10, 40, 100, 20);
         rightPanel.add(lbDate);
         tfDate = new JTextField();
+        tfDate.setEditable(false);
         tfDate.setBounds(90, 40, 100, 20);
         rightPanel.add(tfDate);
         // Định dạng ngày
@@ -279,7 +284,7 @@ public class ExamView extends JPanel{
                 if(e.getClickCount()==2){   //Check for double-click
                     int selectedRow = tableQuest.getSelectedRow();
                     if(selectedRow!=-1){
-                        String id = (String)tableQuest.getValueAt(selectedRow, 0); //Get ID of the selected quesiton
+                        int id = (int) tableQuest.getValueAt(selectedRow, 0); //Get ID of the selected quesiton
                         String content = (String)tableQuest.getValueAt(selectedRow,1);  //Get content of the selected question
                         addToSelectedQuestionTable(id, content);
                     }
@@ -337,14 +342,14 @@ public class ExamView extends JPanel{
         questArr = questionController.getAllQuestions(selectedGrade);
         for(int i=0;i<questArr.size();i++){
             Question question = questArr.get(i);
-            String id = question.getQuestionID();
+            int id = question.getQuestionID();
             String content = question.getQuestionContent();
             String a1 = question.getAnswer1();
             String a2 = question.getAnswer2();
             String a3 = question.getAnswer3();
             String a4 = question.getAnswer4();
             String correctA = question.getCorrectAnswer();
-            String createdBy = question.getCreatedBy();
+            int createdBy = question.getCreatedBy();
             Date createdDate = question.getCreatedDate();
             
             Object[] row = {id, content, a1, a2, a3, a4, correctA, createdBy, createdDate};
@@ -390,7 +395,7 @@ public class ExamView extends JPanel{
         exam.setStatus(status);
         exam.setCreatorId(Integer.parseInt(tfID.getText()));
         
-        if(examController.addExam(exam))
+        if(examController.saveExam(exam, tableSelectedQuest))
             JOptionPane.showMessageDialog(this, "Create Exam successfully!!");
         else
             JOptionPane.showMessageDialog(this, "Create Exam failed!!");
@@ -462,7 +467,7 @@ public class ExamView extends JPanel{
         selectedQuestionModel.setRowCount(0);
     }
     
-    public void addToSelectedQuestionTable(String id, String content){
+    public void addToSelectedQuestionTable(int id, String content){
         //Check if ID already exists in tableSelectedQuest
         for(int i=0;i<selectedQuestionModel.getRowCount();i++){
             if(selectedQuestionModel.getValueAt(i,0).toString().equals(id)){
@@ -486,7 +491,7 @@ public class ExamView extends JPanel{
     
     public void setTeacherID(String teacherID){
         tfID.setText(teacherID);
-        System.out.println(tfID.getText() + ", I'm tfID of ExamView, at line 421 of setTeacherID() method");
+        System.out.println(tfID.getText() + ", I'm tfID of CreateExamView, at line 494 of setTeacherID() method");
     }
     
     public String createExamID(String creatorID, String grade, String duration){

@@ -4,6 +4,7 @@
  */
 package View;
 
+import Controller.TeacherController;
 import Model.Teacher;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -20,20 +21,22 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 /**
  *
  * @author ACER
  */
-public class AdminView {
+public class AdminView extends JFrame{
     JLabel lbId, dataId, lbName, dataName, lbRole, dataRole;
     private Teacher teacher;
-    
+    private TeacherController teacherController;
     // Constructor nhận thông tin Teacher từ LoginView
     public AdminView(Teacher teacher) {
         this.teacher = teacher;  // Lưu thông tin teacher
         initComponents();
         updateView();  // Cập nhật giao diện với thông tin của giáo viên
     }
+    public AdminView(){}
     
     public void initComponents(){
         JFrame f = new JFrame("Admin view");
@@ -49,7 +52,7 @@ public class AdminView {
         
         //Panel userInfo
         JPanel userInfoPanel = new JPanel(new GridBagLayout());
-        userInfoPanel.setBackground(Color.blue);
+        userInfoPanel.setBackground(Color.darkGray);
         userInfoPanel.setPreferredSize(new Dimension(200,100));
         
         //user information labels
@@ -111,10 +114,12 @@ public class AdminView {
         //buttons
         JButton createExamButton = new JButton("Create Exam");
         buttonsPanel.add(createExamButton);
-        JButton examManaementButton = new JButton("Exam Management");
-        buttonsPanel.add(examManaementButton);
-        JButton questionManaementButton = new JButton("Question Management");
-        buttonsPanel.add(questionManaementButton);
+        JButton examManagementButton = new JButton("Exam Management");
+        buttonsPanel.add(examManagementButton);
+        JButton createQuestionButton = new JButton("Create Question");
+        buttonsPanel.add(createQuestionButton);
+//        JButton questionManaementButton = new JButton("Question Management");
+//        buttonsPanel.add(questionManaementButton);
 
         
         navBarPanel.add(buttonsPanel, BorderLayout.CENTER);
@@ -142,26 +147,44 @@ public class AdminView {
 //        contentPanel.setPreferredSize(new Dimension(contentWidth, f.getHeight()));
 
         // Set identify of function buttons to define the GUI class
-        final String question_management = "QUESTION";
-        final String exam_management = "EXAM";
+        final String create_question = "CREATE_QUESTION";
+        final String create_exam = "CREATE_EXAM";
+        final String manage_exam = "MANAGE_EXAM";
     
         // Add ActionListener & MouseListener for ExamView management button
         createExamButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                ExamView exam = new ExamView(teacher.getTeacherId());
-                contentPanel.add(exam, exam_management);
+                CreateExamView createExamView = new CreateExamView(teacher.getTeacherId());
+                contentPanel.add(createExamView, create_exam);
                 CardLayout card = (CardLayout)contentPanel.getLayout();
-                card.show(contentPanel, exam_management);
+                card.show(contentPanel, create_exam);
             }
         });
-        
+
+        examManagementButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                ManageExamView manageExamView = new ManageExamView(teacher.getTeacherId());
+                contentPanel.add(manageExamView, manage_exam);
+                CardLayout card = (CardLayout) contentPanel.getLayout();
+                card.show(contentPanel, manage_exam);
+            }
+        });
+
+        createQuestionButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                CreateQuestionView createQuestionView = new CreateQuestionView(teacher.getTeacherId());
+                contentPanel.add(createQuestionView, create_question);
+                CardLayout card = (CardLayout) contentPanel.getLayout();
+                card.show(contentPanel, create_question);
+            }
+        });
         
         f.add(mainPanel);
         f.setVisible(true);
     }
-    
-    
     
     // Cập nhật giao diện với thông tin người dùng
     public void updateView() {
@@ -172,11 +195,26 @@ public class AdminView {
         }
     }
     
-    public static void main(String[] args){
-        Teacher teacher = new Teacher();
-        teacher.setTeacherId("Danny");
-        teacher.setTeacherName("TunDat");
-        teacher.setRole("Husband");
-        AdminView adminView = new AdminView(teacher);
+    public String getTeacherID(){
+        return teacher.getTeacherId();
     }
+    
+    
+//    public void transferTeacherIDToLoginControlelr(String id){
+//        loginController.transferDataToExamView(id);
+//    }
+//    public static void main(String[] args){
+//        Teacher teacher = new Teacher();
+//        teacher.setTeacherId("Emily");
+//        teacher.setTeacherName("Son Thanh Ngan");
+//        teacher.setRole("My wife");
+//        TeacherView view = new TeacherView(teacher);
+//         
+//        System.out.println(view.getTeacherID() + "hehe");
+////        view.initComponents();
+//    }
+//    public static void main(String[] args){
+//        TeacherView teacherView = new TeacherView();
+//    }
+
 }

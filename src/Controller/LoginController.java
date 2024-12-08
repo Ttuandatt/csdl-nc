@@ -5,9 +5,9 @@
 package Controller;
 import Model.Teacher;
 import DAO.UserDAO;
-import View.ExamView;
+import View.CreateExamView;
 import View.LoginView;
-import View.TeacherView;
+import View.AdminView;
 /**
  *
  * @author ACER
@@ -16,8 +16,8 @@ public class LoginController {
     private Teacher teacher;
     private UserDAO userDAO;
     private LoginView loginView;
-    private TeacherView view;
-    private ExamView examView;
+    private AdminView view;
+    private CreateExamView createExamView;
     public LoginController(){
         userDAO = new UserDAO();
     }
@@ -36,8 +36,8 @@ public class LoginController {
         if (view != null) {
 //            String teacherID = view.getTeacherID();  // Không bị nullPointerException nữa
             // Tiếp tục với việc sử dụng teacherID
-            examView = new ExamView(id);
-            examView.setTeacherID(id);
+            createExamView = new CreateExamView(id);
+            createExamView.setTeacherID(id);
             System.out.println("I'm at transferDataToExamView method of LoginController");
         } else {
             System.out.println("View is null, cannot transfer data.");

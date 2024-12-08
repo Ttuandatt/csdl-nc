@@ -4,9 +4,7 @@
  */
 package Test;
 
-import View.TeacherView;
-import Model.Teacher;
-import Controller.TeacherController;
+import View.LoginView;
 
 /**
  *
@@ -41,6 +39,8 @@ public class Test {
 //    }
     
     public static void main(String[] args){
+        LoginView view = new LoginView();
+
 //        TeacherView view = new TeacherView();
 //        view.initComponents();
     }
